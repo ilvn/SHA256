@@ -47,7 +47,7 @@ extern "C" {
 #define MEMCP(x,y,z) _memcp((x),(y),(z))
 #endif
 
-#ifndef __cdelc
+#ifndef __cdecl
 #define __cdecl
 #endif
 
