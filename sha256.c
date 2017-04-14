@@ -129,7 +129,7 @@ static void _hash(sha256_context *ctx)
 } /* _hash */
 
 /* -------------------------------------------------------------------------- */
-void sha256_init(sha256_context ctx[1])
+void sha256_init(sha256_context *ctx)
 {
     ctx->len[0] = ctx->len[1] = 0;
     ctx->hash[0] = 0x6a09e667; ctx->hash[1] = 0xbb67ae85;
