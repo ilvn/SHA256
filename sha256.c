@@ -148,11 +148,11 @@ void sha256_hash(sha256_context *ctx, uint8_t *dat, uint32_t sz)
 
     for (j = 0, l = 64-i; sz >= l; j += l, sz -= l, l = 64, i = 0)
     {
-        MEMCP(&ctx->buf[i], &dat[j], l);
+        MEMCP((char *)ctx->buf + i, &dat[j], l);
         BSWP(ctx->buf, 16 );
         _hash(ctx);
     }
-    MEMCP(&ctx->buf[i], &dat[j], sz);
+    MEMCP((char *)ctx->buf + i, &dat[j], sz);
 
 } /* _hash */
 
