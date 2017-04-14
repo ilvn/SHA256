@@ -110,8 +110,9 @@ FN_ uint32_t _word(uint8_t *c)
 /* -------------------------------------------------------------------------- */
 FN_ void  _addbits(sha256_context *ctx, uint32_t n)
 {
-	if (ctx->bits[0] > 0xffffffff - n) ctx->bits[1]++;
-	ctx->bits[0] += n;
+	if ( ctx->bits[0] > (0xffffffff - n) )
+		ctx->bits[1] = (ctx->bits[1] + 1) & 0xFFFFFFFF;
+	ctx->bits[0] = (ctx->bits[0] + n) & 0xFFFFFFFF;
 } /* _addbits */
 
 /* -------------------------------------------------------------------------- */
