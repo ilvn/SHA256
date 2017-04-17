@@ -116,7 +116,7 @@ FN_ void  _addbits(sha256_context *ctx, uint32_t n)
 } /* _addbits */
 
 /* -------------------------------------------------------------------------- */
-static void _hash(sha256_context *ctx, uint8_t *buf)
+static void _hash(sha256_context *ctx)
 {
 	register uint32_t a, b, c, d, e, f, g, h, i;
 	uint32_t t[2];
@@ -135,7 +135,7 @@ static void _hash(sha256_context *ctx, uint8_t *buf)
 
 	for (i = 0; i < 64; i++) {
 		if ( i < 16 )
-			W[i] = _word(&buf[_shw(i, 2)]);
+			W[i] = _word(&ctx->buf[_shw(i, 2)]);
 		else
 			W[i] = _G1(W[i - 2]) + W[i - 7] + _G0(W[i - 15]) + W[i - 16];
 
@@ -189,7 +189,7 @@ void sha256_hash(sha256_context *ctx, const void *data, size_t len)
 			ctx->buf[ctx->len] = bytes[i];
 			ctx->len++;
 			if (ctx->len == sizeof(ctx->buf) ) {
-				_hash(ctx, ctx->buf);
+				_hash(ctx);
 				_addbits(ctx, sizeof(ctx->buf) * 8);
 				ctx->len = 0;
 			}
@@ -207,7 +207,7 @@ void sha256_done(sha256_context *ctx, uint8_t *hash)
 			ctx->buf[i] = 0x00;
 
 		if ( ctx->len > 56 )
-			_hash(ctx, ctx->buf);
+			_hash(ctx);
 
 		_addbits(ctx, ctx->len * 8);
 		ctx->buf[63] = _shb(ctx->bits[0],  0);
@@ -218,7 +218,7 @@ void sha256_done(sha256_context *ctx, uint8_t *hash)
 		ctx->buf[58] = _shb(ctx->bits[1],  8);
 		ctx->buf[57] = _shb(ctx->bits[1], 16);
 		ctx->buf[56] = _shb(ctx->bits[1], 24);
-		_hash(ctx, ctx->buf);
+		_hash(ctx);
 
 		if ( hash != NULL )
 			for (i = 0, j = 24; i < 4; i++, j -= 8) {
