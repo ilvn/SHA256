@@ -202,12 +202,16 @@ void sha256_done(sha256_context *ctx, uint8_t *hash)
 	register uint32_t i, j;
 
 	if ( ctx != NULL ) {
-		ctx->buf[ctx->len] = 0x80;
-		for (i = ctx->len + 1; i < sizeof(ctx->buf); i++)
+		j = ctx->len % sizeof(ctx->buf);
+		ctx->buf[j] = 0x80;
+		for (i = j + 1; i < sizeof(ctx->buf); i++)
 			ctx->buf[i] = 0x00;
 
-		if ( ctx->len > 56 )
+		if ( ctx->len > 55 ) {
 			_hash(ctx);
+			for (j = 0; j < sizeof(ctx->buf); j++)
+				ctx->buf[j] = 0x00;
+		}
 
 		_addbits(ctx, ctx->len * 8);
 		ctx->buf[63] = _shb(ctx->bits[0],  0);
