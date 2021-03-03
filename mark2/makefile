@@ -1,12 +1,9 @@
 COMPLR = $(shell which clang >/dev/null; echo $$?)
 ifeq "$(COMPLR)" "0"
 	CC = clang
+	CFLAGS=-Oz -pedantic -Wall -Wextra -Weverything
 else
 	CC = gcc
-endif
-ifeq ($(CC), clang)
-	CFLAGS=-O3 -pedantic -Wall -Wextra -Weverything
-else
 	CFLAGS=-O3 -pedantic -Wall -Wextra -std=c99
 endif
 
