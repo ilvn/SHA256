@@ -1,4 +1,4 @@
-CC = clang
+CC = $(if $(shell which clang),clang,gcc)
 CFLAGS= -O3 -pedantic -Wall -Wextra -std=c99
 CBMC = cbmc
 TARGET = sha256
